@@ -146,17 +146,23 @@ def search(request):
 """
 def q_builder(extent, keys, event_date, reference_date):
     
-    select = "SELECT distinct ?e ?id ?t ?d ?w ?n";
+    select ="SELECT distinct ?e ?id ?t ?d ?w ?n ?link ?place ?con ?thesid";
     prefixes = '\n'.join(('PREFIX geo: <http://www.opengis.net/ont/geosparql#>',
                           'PREFIX strdf: <http://strdf.di.uoa.gr/ontology#>',
                           'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>',
                           'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>',
                           'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>',
                           'PREFIX ev: <http://big-data-europe.eu/security/man-made-changes/ontology#>'));
-    where = '\n'.join(('WHERE{',' ?e rdf:type ev:NewsEvent . ',
+    where = '\n'.join(('WHERE{',
+                       ' ?e rdf:type ev:NewsEvent . ',
                        ' ?e ev:hasId ?id . ?e ev:hasTitle ?t . ',
-                       ' ?e ev:hasDate ?d . ','?e ev:hasArea ?a . ', '?a ev:hasName ?n . ',
+                       ' ?e ev:hasDate ?d . ',
+                       ' ?e ev:hasArea ?a . ',
+                       ' ?a ev:hasName ?n . ',
                        ' ?a geo:hasGeometry ?g . ',
+                       ' ?e ev:hasEntity ?ent . ?ent ev:hasThesaurusId ?thesid . ?ent ev:hasConceptURI ?con . ',
+                       ' ?e ev:hasImages ?im . ?im  ev:hasLink ?link . ',
+                       ' ?im ev:hasPlace ?place . ',
                        ' ?g geo:asWKT ?w .'));
     filters = []
     
