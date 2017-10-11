@@ -50,7 +50,7 @@ def search(request):
     print("Event-Retrieve query:\t" + str(query))
     
     hrs     = {'content-type': 'application/x-www-form-urlencoded', 'Accept': 'application/sparql-results+xml'}
-    url     = "http://semagrow_sc7:8080/SemaGrow/sparql"
+    url     = "http://strabon:8080/strabon/Query"
     pars    = {"query": query, "format": 'SPARQL/XML'}
     response= requests.post(url, params = pars, headers = hrs)
     print("status-code: " + str(response.status_code) + "\treason: " + str(response.reason))
