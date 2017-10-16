@@ -153,7 +153,7 @@ def q_builder(extent, keys, event_date, reference_date):
                           'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>',
                           'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>',
                           'PREFIX ev: <http://big-data-europe.eu/security/man-made-changes/ontology#>'));
-    where = '\n'.join(('WHERE{',
+    where = '\n'.join(('from <file:/resources/events.nt> WHERE{',
                        ' ?e rdf:type ev:NewsEvent . ',
                        ' ?e ev:hasId ?id . ?e ev:hasTitle ?t . ',
                        ' ?e ev:hasDate ?d . ',
