@@ -76,6 +76,7 @@ def search(request):
         # new (pool-party) info:
         thesaurus   = ""
         concepturi  = ""
+        prefLabel   = ""
         link        = ""
         place       = ""
         for binding in bindings:
@@ -100,6 +101,9 @@ def search(request):
                 
             elif binding.attrib['name'] == 'con':
                 concepturi  = binding[0].text
+                
+            elif binding.attrib['name'] == 'pl':
+                prefLabel  = binding[0].text
 
             elif binding.attrib['name'] == 'link':
                 link        = binding[0].text
@@ -109,7 +113,7 @@ def search(request):
         
         area    = {'name': name, 'geometry': gwkt}
         img     = {'link': link, 'place': place}
-        entity  = {'thesaurus': thesaurus, 'concept_uri': concepturi}
+        entity  = {'thesaurus': thesaurus, 'concept_uri': concepturi, 'prefLabel': prefLabel}
         event   = {'id': event_id, 'title':title, 'eventDate': date, 'areas':[area], 'entities': [entity], 'images': [img]}
         
         #if event's id already in our dictionary then add all the neccessary info.
@@ -146,7 +150,7 @@ def search(request):
 """
 def q_builder(extent, keys, event_date, reference_date):
     
-    select ="SELECT distinct ?e ?id ?t ?d ?w ?n ?link ?place ?con ?thesid";
+    select ="SELECT distinct ?e ?id ?t ?d ?w ?n ?link ?place ?con ?thesid ?pl";
     prefixes = '\n'.join(('PREFIX geo: <http://www.opengis.net/ont/geosparql#>',
                           'PREFIX strdf: <http://strdf.di.uoa.gr/ontology#>',
                           'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>',
@@ -160,7 +164,7 @@ def q_builder(extent, keys, event_date, reference_date):
                        ' ?e ev:hasArea ?a . ',
                        ' ?a ev:hasName ?n . ',
                        ' ?a geo:hasGeometry ?g . ',
-                       ' ?e ev:hasEntity ?ent . ?ent ev:hasThesaurusId ?thesid . ?ent ev:hasConceptURI ?con . ',
+                       ' ?e ev:hasEntity ?ent . ?ent ev:hasThesaurusId ?thesid . ?ent ev:hasConceptURI ?con . ?ent ev:hasPrefLabel ?pl .',
                        ' ?e ev:hasImages ?im . ?im  ev:hasLink ?link . ',
                        ' ?im ev:hasPlace ?place . ',
                        ' ?g geo:asWKT ?w .'));
